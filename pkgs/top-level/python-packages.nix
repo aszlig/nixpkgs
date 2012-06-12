@@ -848,6 +848,27 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  gyp = buildPythonPackage rec {
+    name = "gyp-${version}";
+    version = "1415";
+
+    src = fetchsvn {
+      url = "http://gyp.googlecode.com/svn/trunk";
+      rev = "${version}";
+      sha256 = "310e644dbd1d700d55dcd4f7f10faf017bab03346a3498cc9d34034500dc295b";
+    };
+
+    doCheck = false;
+
+    installCommand = "python setup.py install --prefix=$out";
+
+    meta = {
+      homepage = http://code.google.com/p/gyp/;
+      description = "Generate project/build files for a project";
+    };
+  };
+
+
   httplib2 = buildPythonPackage rec {
     name = "httplib2-0.6.0";
 
