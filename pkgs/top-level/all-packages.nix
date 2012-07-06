@@ -3257,6 +3257,8 @@ let
 
   scmccid = callPackage ../development/libraries/scmccid { };
 
+  cares = callPackage ../development/libraries/c-ares { };
+
   ccrtp = callPackage ../development/libraries/ccrtp { };
   ccrtp_1_8 = callPackage ../development/libraries/ccrtp/1.8.nix { };
 
