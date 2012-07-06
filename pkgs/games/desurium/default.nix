@@ -8,8 +8,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = git://github.com/lodle/Desurium.git;
-    rev = "2918d09ad47b6ddf28a4902da0df428ca429385c";
-    sha256 = "95066b7e420f080c7fa784a82534841f380d2340dd7e12e155a58ccc63a321b9";
+    rev = "70ba8fe6258f864ebff949150148882e8c6ab1f5";
+    sha256 = "7a1d3dfa9745745288536a46b1b3e061941ccb3511da373d73de9fd8ad7c0935";
   };
 
   cmakeFlags = [
