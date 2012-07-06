@@ -6452,8 +6452,14 @@ let
   };
 
   chromium = lowPrio (callPackage ../applications/networking/browsers/chromium {
+    flavor = "chromium";
     gconf = gnome.GConf;
   });
+
+  chromiumEmbedded = callPackage ../applications/networking/browsers/chromium {
+    flavor = "cef";
+    gconf = gnome.GConf;
+  };
 
   chromeWrapper = wrapFirefox
     { browser = chromium; browserName = chromium.packageName; desktopName = "Chromium";
