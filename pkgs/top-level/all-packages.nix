@@ -7809,6 +7809,8 @@ let
 
   crrcsim = callPackage ../games/crrcsim {};
 
+  desurium = callPackage ../games/desurium { };
+
   dwarf_fortress = callPackage_i686 ../games/dwarf-fortress { };
 
   eduke32 = callPackage ../games/eduke32 { };
