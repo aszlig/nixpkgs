@@ -4763,6 +4763,8 @@ let
 
   telepathy_qt = callPackage ../development/libraries/telepathy/qt { };
 
+  tinyxml = callPackage ../development/libraries/tinyxml { };
+
   tk = callPackage ../development/libraries/tk { };
 
   tnt = callPackage ../development/libraries/tnt { };
