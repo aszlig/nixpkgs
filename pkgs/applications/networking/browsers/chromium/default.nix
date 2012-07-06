@@ -1,4 +1,4 @@
-{ stdenv, getConfig, fetchurl, makeWrapper, which
+{ stdenv, getConfig, fetchurl, fetchsvn, makeWrapper, which
 
 # this is needed in order to build the versions older than 21.x
 , subversion
@@ -194,8 +194,38 @@ let
     '';
   }; in stdenv.mkDerivation (baseAttrs // (changes baseAttrs));
 
+  # XXX: add this to sources.nix
+  cefSrc = fetchsvn {
+    url = http://chromiumembedded.googlecode.com/svn/trunk/cef3;
+    rev = 724;
+    sha256 = "8d970a2ca02b53d90f0ce4344691d63ba2b368b403657f7fb1b4e55bc3918ab2";
+  };
+
 in if flavor == "cef" then mkChromiumDerivation flavor (a: {
-  meta = with stdenv.lib; {
+  postUnpack = ''
+    cp -prvd "${cefSrc}" "$sourceRoot/cef"
+    chmod -R u+w "$sourceRoot/cef"
+  '';
+
+  prePatch = a.prePatch + ''
+
+    substituteInPlace cef/tools/make_version_header.py \
+      --replace "svn.get_revision()" "\"${toString cefSrc.rev}\""
+  '';
+
+  configurePhase = ''(
+    cd cef
+    python tools/make_version_header.py \
+      --header include/cef_version.h \
+      --version ../chrome/VERSION
+    python tools/patcher.py \
+      --patch-config patch/patch.cfg
+    python tools/gyp_cef --depth .. cef.gyp -I cef.gypi ${a.gypFlags}
+  )'';
+
+  buildPhase = "false";
+
+  meta =  with stdenv.lib; {
     description = "A simple framework for embedding chromium browser windows in other applications";
     homepage = http://code.google.com/p/chromiumembedded/;
     license = licenses.bsd3;
