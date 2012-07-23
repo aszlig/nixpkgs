@@ -222,7 +222,14 @@ in if flavor == "cef" then mkChromiumDerivation flavor [ "libcef" ] (a: {
     python tools/gyp_cef --depth .. cef.gyp -I cef.gypi ${a.gypFlags}
   )'';
 
-  buildPhase = "false";
+  installPhase = ''
+    mkdir -vp "$out/libexec/${a.packageName}"
+    cp -v "out/${a.buildType}/"*.pak "$out/libexec/${a.packageName}/"
+    cp -vR "out/${a.buildType}/locales" "out/${a.buildType}/resources" "$out/libexec/${a.packageName}/"
+
+    mkdir -vp "$out/lib"
+    cp -p "out/${a.buildType}/lib.target/libcef.so" "$out/lib/"
+  '';
 
   meta =  with stdenv.lib; {
     description = "A simple framework for embedding chromium browser windows in other applications";
