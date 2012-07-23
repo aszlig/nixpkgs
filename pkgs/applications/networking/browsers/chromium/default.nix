@@ -85,7 +85,7 @@ let
     xdg_utils yasm zlib
   ] ++ stdenv.lib.optional needsSubversion subversion;
 
-  mkChromiumDerivation = packageName: changes: let baseAttrs = rec {
+  mkChromiumDerivation = packageName: buildTargets: changes: let baseAttrs = rec {
     name = "${packageName}-${version}";
     inherit packageName;
 
@@ -168,8 +168,7 @@ let
     buildFlags = [
       "BUILDTYPE=${buildType}"
       "library=shared_library"
-      "chrome"
-    ];
+    ] ++ buildTargets;
 
     installPhase = ''
       mkdir -vp "$out/libexec/${packageName}"
@@ -201,7 +200,7 @@ let
     sha256 = "8d970a2ca02b53d90f0ce4344691d63ba2b368b403657f7fb1b4e55bc3918ab2";
   };
 
-in if flavor == "cef" then mkChromiumDerivation flavor (a: {
+in if flavor == "cef" then mkChromiumDerivation flavor [ "libcef" ] (a: {
   postUnpack = ''
     cp -prvd "${cefSrc}" "$sourceRoot/cef"
     chmod -R u+w "$sourceRoot/cef"
@@ -231,7 +230,7 @@ in if flavor == "cef" then mkChromiumDerivation flavor (a: {
     license = licenses.bsd3;
     platforms = with stdenv.lib.platforms; linux;
   };
-}) else mkChromiumDerivation flavor (_: {
+}) else mkChromiumDerivation flavor [ "chrome" ] (a: {
   meta = with stdenv.lib; {
     description = "Chromium, an open source web browser";
     homepage = http://www.chromium.org/;
