@@ -229,6 +229,8 @@ in if flavor == "cef" then mkChromiumDerivation flavor [ "libcef" ] (a: {
 
     mkdir -vp "$out/lib"
     cp -p "out/${a.buildType}/lib.target/libcef.so" "$out/lib/"
+
+    cp -vR cef/include "$out/include"
   '';
 
   meta =  with stdenv.lib; {
