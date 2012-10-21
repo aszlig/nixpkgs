@@ -3721,6 +3721,8 @@ let
 
   glpk = callPackage ../development/libraries/glpk { };
 
+  glu = callPackage ../development/libraries/glu { };
+
   gmime = callPackage ../development/libraries/gmime { };
 
   gmm = callPackage ../development/libraries/gmm { };
