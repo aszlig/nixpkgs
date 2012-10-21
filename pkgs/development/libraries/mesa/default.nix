@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, flex, bison, pkgconfig, libdrm, file, expat, makedepend
-, libXxf86vm, libXfixes, libXdamage, glproto, dri2proto, libX11, libxcb, libXext
-, libXt, udev, enableTextureFloats ? false
+{ stdenv, fetchurl, autoconf, automake, libtool, flex, bison, pkgconfig, libdrm
+, file, expat, makedepend, libXxf86vm, libXfixes, libXdamage, glproto
+, dri2proto, libX11, libxcb, libXext, libXt, udev, enableTextureFloats ? false
 , python, libxml2Python }:
 
 if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
 
-let version = "8.0.4"; in
+let version = "9.0"; in
 
 stdenv.mkDerivation {
   name = "mesa-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    md5 = "d546f988adfdf986cff45b1efa2d8a46";
+    md5 = "60e557ce407be3732711da484ab3db6c";
   };
 
   patches =
@@ -22,14 +22,18 @@ stdenv.mkDerivation {
 
   prePatch = "patchShebangs .";
 
+  preConfigure = ''
+    autoreconf -vfi
+  '';
+
   configureFlags =
       " --enable-gles1 --enable-gles2 --enable-gallium-egl"
     + " --with-gallium-drivers=i915,nouveau,r600,svga,swrast"
     # Texture floats are patented, see docs/patents.txt
     + stdenv.lib.optionalString enableTextureFloats " --enable-texture-float";
 
-  buildInputs = [ expat libdrm libXxf86vm libXfixes libXdamage glproto dri2proto
-    libxml2Python libX11 libXext libxcb libXt udev ];
+  buildInputs = [ autoconf automake libtool expat libdrm libXxf86vm libXfixes
+    libXdamage glproto dri2proto libxml2Python libX11 libXext libxcb libXt udev ];
 
   buildNativeInputs = [ pkgconfig python makedepend file flex bison ];
 
