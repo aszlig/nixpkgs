@@ -1,7 +1,8 @@
 { stdenv, fetchurl, substituteAll
 , libXrender, libXinerama, libXcursor, libXmu , libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig
-, zlib, libjpeg, libpng, libmng, which, mesa, openssl, dbus, cups, pkgconfig
+, zlib, libjpeg, libpng, libmng, which, mesa, glu, openssl, dbus, cups
+, pkgconfig
 , libtiff, glib, icu
 , mysql, postgresql, sqlite
 , perl, coreutils, libXi
@@ -78,7 +79,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs =
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes
-      libXv libXi libSM
+      libXv libXi libSM glu
     ]
     ++ optional (stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms) mesa
     ++ optional (buildWebkit || buildMultimedia) alsaLib
