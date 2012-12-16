@@ -8228,6 +8228,8 @@ let
 
   stardust = callPackage ../games/stardust {};
 
+  steam = callPackage_i686 ../games/steam { };
+
   stuntrally = callPackage ../games/stuntrally { };
 
   superTux = callPackage ../games/super-tux { };
