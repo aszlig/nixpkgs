@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11 }:
+{ stdenv, fetchurl, makeWrapper, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "steam-${version}";
@@ -10,10 +10,12 @@ stdenv.mkDerivation rec {
     sha256 = "1mknhr9xgaqfqp7p449w974ias8g69yzgjh3z4zyzci6ccfb8dp1";
   };
 
+  buildInputs = [ unzip makeWrapper ];
+
   unpackCmd = ''
-    ar p "$curSrc" data.tar.gz | \
-      tar xz ./usr/lib/steam/bootstraplinux_ubuntu12_32.tar.xz -O | \
-      tar xJ ubuntu12_32
+    ar p "$curSrc" data.tar.gz |
+      tar xz ./usr/lib/steam/bootstraplinux_ubuntu12_32.tar.xz -O |
+      tar xJ ubuntu12_32/steam
   '';
 
   dontStrip = true;
@@ -22,12 +24,16 @@ stdenv.mkDerivation rec {
     rpath = stdenv.lib.makeLibraryPath [ stdenv.gcc.gcc libX11 ];
   in ''
     patchelf \
-      --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+      --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
       --set-rpath "${rpath}" \
       steam
   '';
 
   installPhase = ''
-    install -vD steam "$out/bin/steam"
+    libexec="$out/libexec/steam"
+    install -vt "$libexec/bin" steam
+
+    makeWrapper "$libexec/bin/steam" "$out/bin/steam" \
+      --set LD_LIBRARY_PATH "$libexec"
   '';
 }
