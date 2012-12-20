@@ -338,6 +338,8 @@ let
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
+  sandbox = callPackage ../build-support/sandbox { };
+
   srcOnly = args: (import ../build-support/src-only) ({inherit stdenv; } // args);
 
   substituteAll = import ../build-support/substitute/substitute-all.nix {

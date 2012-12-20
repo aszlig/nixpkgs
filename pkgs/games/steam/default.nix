@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, makeWrapper, libX11, writeText
+{ stdenv, fetchurl, unzip, makeWrapper, sandbox, libX11, writeText
 , zlib, pango, glib, mesa
 , libXrandr, libXext, libXfixes, libXi, libXrender, libXinerama
 , cups, cairo, freetype, fontconfig, openal, nss, gtk2, gdk_pixbuf
@@ -74,14 +74,6 @@ let
     '';
   };
 
-  sandbox = stdenv.mkDerivation {
-    name = "steam-sandbox";
-    buildCommand = ''
-      gcc -O3 -std=c99 -Wall -Werror -pedantic \
-        -pthread "${./sandbox.c}" -o "$out"
-    '';
-  };
-
 in stdenv.mkDerivation {
   name = "steam-${version}";
   inherit version srcs;
@@ -135,7 +127,7 @@ in stdenv.mkDerivation {
     echo "$installed_data" > "$libexec/package/steam_client_ubuntu12.installed"
     sh "${fakePackageBuilder}" > "$libexec/package/steam_client_ubuntu12"
 
-    makeWrapper "${sandbox}" "$out/bin/steam" \
+    makeWrapper "${sandbox "steam"}" "$out/bin/steam" \
       --set LD_LIBRARY_PATH "$libexec/ubuntu12_32" \
       --set NIX_STEAM_ALLOWED_PATHS "$libexec:\$HOME/Steam" \
       --set LD_PRELOAD "${preloader}" \
