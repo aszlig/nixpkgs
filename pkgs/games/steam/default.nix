@@ -66,6 +66,14 @@ let
     STEAMPKG
   '';
 
+  preloader = stdenv.mkDerivation {
+    name = "steam-preloader.so";
+    buildCommand = ''
+      gcc -O3 -std=c99 -finline-functions -Wall -Werror -pedantic \
+        -pthread "${./preload.c}" -fPIC -shared -o "$out" -ldl
+    '';
+  };
+
 in stdenv.mkDerivation {
   name = "steam-${version}";
   inherit version srcs;
@@ -120,6 +128,8 @@ in stdenv.mkDerivation {
     sh "${fakePackageBuilder}" > "$libexec/package/steam_client_ubuntu12"
 
     makeWrapper "$libexec/ubuntu12_32/steam" "$out/bin/steam" \
-      --set LD_LIBRARY_PATH "$libexec/ubuntu12_32"
+      --set LD_LIBRARY_PATH "$libexec/ubuntu12_32" \
+      --set NIX_STEAM_ALLOWED_PATHS "$libexec:\$HOME/Steam" \
+      --set LD_PRELOAD "${preloader}"
   '';
 }
