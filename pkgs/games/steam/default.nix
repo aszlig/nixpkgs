@@ -74,6 +74,14 @@ let
     '';
   };
 
+  sandbox = stdenv.mkDerivation {
+    name = "steam-sandbox";
+    buildCommand = ''
+      gcc -O3 -std=c99 -Wall -Werror -pedantic \
+        -pthread "${./sandbox.c}" -o "$out"
+    '';
+  };
+
 in stdenv.mkDerivation {
   name = "steam-${version}";
   inherit version srcs;
@@ -127,9 +135,10 @@ in stdenv.mkDerivation {
     echo "$installed_data" > "$libexec/package/steam_client_ubuntu12.installed"
     sh "${fakePackageBuilder}" > "$libexec/package/steam_client_ubuntu12"
 
-    makeWrapper "$libexec/ubuntu12_32/steam" "$out/bin/steam" \
+    makeWrapper "${sandbox}" "$out/bin/steam" \
       --set LD_LIBRARY_PATH "$libexec/ubuntu12_32" \
       --set NIX_STEAM_ALLOWED_PATHS "$libexec:\$HOME/Steam" \
-      --set LD_PRELOAD "${preloader}"
+      --set LD_PRELOAD "${preloader}" \
+      --add-flags "$libexec/ubuntu12_32/steam"
   '';
 }
