@@ -27,6 +27,10 @@ in stdenv.mkDerivation rec {
 
   passthru = { inherit zlib; };
 
+  crossAttrs = stdenv.lib.optionalAttrs (stdenv.cross.libc == "msvcrt") {
+    CFLAGS = "-DDBL_EPSILON=__DBL_EPSILON__";
+  };
+
   meta = with stdenv.lib; {
     description = "The official reference implementation for the PNG file format" + whenPatched " with animation patch";
     homepage = http://www.libpng.org/pub/png/libpng.html;
