@@ -3,7 +3,7 @@
 , samba, socat, vde2, cdrkit, pathsFromGraph, gnugrep
 }:
 
-{ isoFile, productKey, arch ? null }:
+{ isoFile, productKey, arch ? null, memSize ? 512 }:
 
 with stdenv.lib;
 
@@ -60,6 +60,7 @@ in rec {
       "net config server /autodisconnect:-1"
     ] ++ concatLists (mapAttrsToList genDriveCmds drives));
     suspendTo = "state.gz";
+    qemuArgs = [ "-m ${toString memSize}" ];
   };
 
   suspendedVM = stdenv.mkDerivation {
@@ -77,7 +78,7 @@ in rec {
 
   resumeAndRun = command: runInVM "${suspendedVM}/disk.img" {
     resumeFrom = "${suspendedVM}/state.gz";
-    qemuArgs = singleton "-snapshot";
+    qemuArgs = [ "-snapshot" "-m ${toString memSize}" ];
     inherit command;
   };
 }

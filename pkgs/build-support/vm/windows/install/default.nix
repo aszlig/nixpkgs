@@ -52,6 +52,7 @@ let
     inherit sshKey;
     installMode = true;
     qemuArgs = [
+      "-m 512"
       "-boot order=c,once=d"
       "-drive file=${instfloppy},readonly,index=0,if=floppy"
       "-drive file=winvm.img,index=0,media=disk"
