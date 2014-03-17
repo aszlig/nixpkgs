@@ -1,8 +1,8 @@
 { stdenv, fetchurl, makeWrapper, ninja, which
 
 # default dependencies
-, bzip2, flac, speex
-, libevent, expat, libjpeg
+, bzip2, flac, speex, icu, libopus
+, libevent, expat, libjpeg, snappy
 , libpng, libxml2, libxslt
 , xdg_utils, yasm, zlib
 , libusb1, libexif, pciutils
@@ -116,8 +116,9 @@ let
     use_system_libexif = true;
     use_system_libjpeg = true;
     use_system_libpng = false; # PNG dlopen() version conflict
-    use_system_libusb = true;
     use_system_libxml = true;
+    use_system_opus = true;
+    use_system_snappy = true;
     use_system_speex = true;
     use_system_ssl = useOpenSSL;
     use_system_stlport = true;
@@ -127,7 +128,8 @@ let
     use_system_protobuf = true;
 
     use_system_harfbuzz = false;
-    use_system_icu = false;
+    use_system_icu = false; # Doesn't support ICU 52 yet.
+    use_system_libusb = false; # http://crbug.com/266149
     use_system_libwebp = false; # http://crbug.com/133161
     use_system_skia = false;
     use_system_sqlite = false; # http://crbug.com/22208
@@ -135,8 +137,8 @@ let
   };
 
   defaultDependencies = [
-    bzip2 flac speex
-    libevent expat libjpeg
+    bzip2 flac speex icu libopus
+    libevent expat libjpeg snappy
     libpng libxml2 libxslt
     xdg_utils yasm zlib
     libusb1 libexif
@@ -228,6 +230,7 @@ in stdenv.mkDerivation rec {
   });
 
   configurePhase = ''
+    python build/linux/unbundle/replace_gyp_files.py ${gypFlags}
     python build/gyp_chromium -f ninja --depth "$(pwd)" ${gypFlags}
   '';
 
