@@ -5281,6 +5281,8 @@ let
 
   ming = callPackage ../development/libraries/ming { };
 
+  minizip = callPackage ../development/libraries/minizip { };
+
   minmay = callPackage ../development/libraries/minmay { };
 
   miro = callPackage ../applications/video/miro {
