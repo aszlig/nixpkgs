@@ -5019,6 +5019,8 @@ let
 
   libpcap = callPackage ../development/libraries/libpcap { };
 
+  libpdf = callPackage ../applications/networking/browsers/chromium/libpdf.nix { };
+
   libpipeline = callPackage ../development/libraries/libpipeline { };
 
   libpng = callPackage ../development/libraries/libpng { };
@@ -8493,7 +8495,7 @@ let
 
   midori = callPackage ../applications/networking/browsers/midori { };
 
-  midoriWrapper = wrapFirefox
+  midoriWrapper = wrapBrowser
     { browser = midori; browserName = "midori"; desktopName = "Midori";
       icon = "${midori}/share/icons/hicolor/22x22/apps/midori.png";
     };
@@ -8726,6 +8728,8 @@ let
   };
 
   pdftk = callPackage ../tools/typesetting/pdftk { };
+
+  pepperflash = callPackage ../applications/networking/browsers/chromium/pepperflash.nix { };
 
   pianobar = callPackage ../applications/audio/pianobar { };
 
@@ -9233,23 +9237,44 @@ let
 
   wordnet = callPackage ../applications/misc/wordnet { };
 
-  wrapChromium = browser: wrapFirefox {
-    inherit browser;
+  wrapChromium = browser: let
+    channel = browser.channel;
+    cfg = stdenv.lib.attrByPath [ browser.packageName ] {} config;
+    pepperPlugins = ([]
+      ++ lib.optional (cfg.enablePepperPDF or false)
+        (libpdf.override { inherit channel; })
+      ++ lib.optional (cfg.enablePepperFlash or false)
+        (pepperflash.override { inherit channel; })
+    );
+    pepperFlags = toString (map (x: x.pepperFlags) pepperPlugins);
     browserName = browser.packageName;
-    desktopName = "Chromium";
-    icon = "${browser}/share/icons/hicolor/48x48/apps/${browser.packageName}.png";
-  };
+  in
+    wrapBrowser {
+      inherit browser browserName;
+      desktopName = "Chromium";
+      icon = "${browser}/share/icons/hicolor/48x48/apps/${browserName}.png";
+      binPath = "${browser}/${browser.binPath}";
+      extraFlags = pepperFlags;
+    };
 
   wrapFirefox =
     { browser, browserName ? "firefox", desktopName ? "Firefox", nameSuffix ? ""
     , icon ? "${browser}/lib/${browser.name}/icons/mozicon128.png" }:
+    wrapBrowser {
+      inherit browser browserName desktopName nameSuffix icon;
+    };
+
+  wrapBrowser =
+    { browser, browserName, desktopName, icon, nameSuffix ? ""
+    , binPath ? "${browser}/bin/${browserName}", extraFlags ? "" }:
     let
       cfg = stdenv.lib.attrByPath [ browserName ] {} config;
       enableAdobeFlash = cfg.enableAdobeFlash or false;
       enableGnash = cfg.enableGnash or false;
     in
-    import ../applications/networking/browsers/firefox/wrapper.nix {
-      inherit stdenv lib makeWrapper makeDesktopItem browser browserName desktopName nameSuffix icon;
+    import ../applications/networking/browsers/browser-wrapper/wrapper.nix {
+      inherit stdenv lib makeWrapper makeDesktopItem browser browserName;
+      inherit desktopName nameSuffix icon binPath extraFlags;
       plugins =
          assert !(enableGnash && enableAdobeFlash);
          ([ ]
