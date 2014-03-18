@@ -5019,7 +5019,7 @@ let
 
   libpcap = callPackage ../development/libraries/libpcap { };
 
-  libpdf = callPackage ../applications/networking/browsers/chromium/libpdf.nix { };
+  libpdf = callPackage ../applications/networking/browsers/chromium/plugins/libpdf.nix { };
 
   libpipeline = callPackage ../development/libraries/libpipeline { };
 
@@ -8729,7 +8729,7 @@ let
 
   pdftk = callPackage ../tools/typesetting/pdftk { };
 
-  pepperflash = callPackage ../applications/networking/browsers/chromium/pepperflash.nix { };
+  pepperflash = callPackage ../applications/networking/browsers/chromium/plugins/pepperflash.nix { };
 
   pianobar = callPackage ../applications/audio/pianobar { };
 

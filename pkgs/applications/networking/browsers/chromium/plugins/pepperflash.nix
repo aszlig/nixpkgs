@@ -6,7 +6,7 @@ with stdenv.lib;
 
 let
 
-sources = import ./sources.nix;
+sources = import ../sources.nix;
 
 pepperflash = with (builtins.getAttr channel sources);
 stdenv.mkDerivation rec {
