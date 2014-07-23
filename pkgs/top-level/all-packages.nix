@@ -6565,7 +6565,7 @@ let
 
   ngircd = callPackage ../servers/irc/ngircd { };
 
-  nsd = callPackage ../servers/dns/nsd { };
+  nsd = callPackage ../servers/dns/nsd (config.nsd or {});
 
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
 
