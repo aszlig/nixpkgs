@@ -1624,6 +1624,8 @@ let
     perl = perl510;
   };
 
+  openntpd = callPackage ../tools/networking/openntpd { };
+
   openobex = callPackage ../tools/bluetooth/openobex { };
 
   openresolv = callPackage ../tools/networking/openresolv { };
