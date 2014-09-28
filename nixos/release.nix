@@ -180,6 +180,19 @@ in rec {
   );
 
 
+  # Ensure that all packages used by the minimal NixOS config end up in the channel.
+  dummy = forAllSystems (system: pkgs.runCommand "dummy"
+    { toplevel = (import lib/eval-config.nix {
+        inherit system;
+        modules = lib.singleton ({ config, pkgs, ... }:
+          { fileSystems."/".device  = lib.mkDefault "/dev/sda1";
+            boot.loader.grub.device = lib.mkDefault "/dev/sda";
+          });
+      }).config.system.build.toplevel;
+    }
+    "mkdir $out; ln -s $toplevel $out/dummy");
+
+
   # Provide a tarball that can be unpacked into an SD card, and easily
   # boot that system from uboot (like for the sheevaplug).
   # The pc variant helps preparing the expression for the system tarball

@@ -5,16 +5,18 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-1.8pre3766_809ca33";
+  name = "nix-1.8pre3823_53b044c";
 
   src = fetchurl {
-    url = "http://hydra.nixos.org/build/13584170/download/5/${name}.tar.xz";
-    sha256 = "e6d91e73aabf8e8912f9701bf87b66089c197c5b8c8fbcc1707b888c88b96dfd";
+    url = "http://hydra.nixos.org/build/14677332/download/5/${name}.tar.xz";
+    sha256 = "a6f87f89c2206c15837024ebb88eb593662b2450d3cfc1d91762683691aaab2e";
   };
 
   nativeBuildInputs = [ perl pkgconfig ];
 
-  buildInputs = [ curl openssl boehmgc sqlite ];
+  buildInputs = [ curl openssl sqlite ];
+
+  propagatedBuildInputs = [ boehmgc ];
 
   # Note: bzip2 is not passed as a build input, because the unpack phase
   # would end up using the wrong bzip2 when cross-compiling.
