@@ -5,4 +5,4 @@ addIncludePath () {
     fi
 }
 
-envHooks=(${envHooks[@]} addIncludePath)
+addEnvHooks addIncludePath

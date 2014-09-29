@@ -5,5 +5,5 @@ addGstreamer1LibPath () {
     fi
 }
 
-envHooks=(${envHooks[@]} addGstreamer1LibPath)
+addEnvHooks addGstreamer1LibPath
 

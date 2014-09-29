@@ -52,9 +52,9 @@ if [ -z "$dontUseCmakeConfigure" -a -z "$configurePhase" ]; then
 fi
 
 if [ -n "$crossConfig" ]; then
-    crossEnvHooks+=(addCMakeParams)
+    addCrossEnvHooks addCMakeParams
 else
-    envHooks+=(addCMakeParams)
+    addEnvHooks addCMakeParams
 fi
 
 makeCmakeFindLibs(){

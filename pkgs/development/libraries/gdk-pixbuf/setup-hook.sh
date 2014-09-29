@@ -22,4 +22,4 @@ findGdkPixbufLoaders() {
 
 }
 
-envHooks+=(findGdkPixbufLoaders)
+addEnvHooks findGdkPixbufLoaders

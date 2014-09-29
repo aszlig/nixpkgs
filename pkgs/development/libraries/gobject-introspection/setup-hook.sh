@@ -11,4 +11,4 @@ make_gobject_introspection_find_gir_files() {
     fi
 }
 
-envHooks+=(make_gobject_introspection_find_gir_files)
+addEnvHooks make_gobject_introspection_find_gir_files

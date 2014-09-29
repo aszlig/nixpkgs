@@ -4,7 +4,7 @@ addPkgConfigPath () {
 }
 
 if test -n "$crossConfig"; then
-    crossEnvHooks=(${crossEnvHooks[@]} addPkgConfigPath)
+    addCrossEnvHooks addPkgConfigPath
 else
-    envHooks=(${envHooks[@]} addPkgConfigPath)
+    addEnvHooks addPkgConfigPath
 fi

@@ -10,4 +10,4 @@ addGuileLibPath () {
     fi
 }
 
-envHooks=(${envHooks[@]} addGuileLibPath)
+addEnvHooks addGuileLibPath
