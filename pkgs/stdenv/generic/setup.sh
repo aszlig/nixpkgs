@@ -3,15 +3,17 @@
 # setting of hooks both from Nix expressions (as attributes /
 # environment variables) and from shell scripts (as functions).
 runHook() {
-    local hookName="$1"
-    case "$(type -t $hookName)" in
-        (function|alias|builtin) $hookName;;
-        (file) source $hookName;;
-        (keyword) :;;
-        (*) eval "${!hookName}";;
-    esac
+    while [ -n "$1" ]; do
+        if fun="$(command -v "$1")"; then
+            "$fun"
+        elif [ -e "$1" ]; then
+            . "$1"
+        else
+            eval "\$$1"
+        fi
+        shift
+    done
 }
-
 
 exitHandler() {
     exitCode=$?
