@@ -126,9 +126,10 @@ fi
 
 
 # Execute the pre-hook.
-export SHELL=@shell@
-export CONFIG_SHELL="$SHELL"
-if [ -z "$shell" ]; then export shell=@shell@; fi
+SHELL="@shell@"
+CONFIG_SHELL="$SHELL"
+if [ -z "$shell" ]; then shell="@shell@"; fi
+export shell SHELL CONFIG_SHELL
 runHook preHook
 
 
@@ -240,20 +241,22 @@ done
 
 # Add the output as an rpath.
 if [ "$NIX_NO_SELF_RPATH" != 1 ]; then
-    export NIX_LDFLAGS="-rpath $out/lib $NIX_LDFLAGS"
+    NIX_LDFLAGS="-rpath $out/lib $NIX_LDFLAGS"
     if [ -n "$NIX_LIB64_IN_SELF_RPATH" ]; then
-        export NIX_LDFLAGS="-rpath $out/lib64 $NIX_LDFLAGS"
+        NIX_LDFLAGS="-rpath $out/lib64 $NIX_LDFLAGS"
     fi
     if [ -n "$NIX_LIB32_IN_SELF_RPATH" ]; then
-        export NIX_LDFLAGS="-rpath $out/lib32 $NIX_LDFLAGS"
+        NIX_LDFLAGS="-rpath $out/lib32 $NIX_LDFLAGS"
     fi
+    export NIX_LDFLAGS
 fi
 
 
 # Set the TZ (timezone) environment variable, otherwise commands like
 # `date' will complain (e.g., `Tue Mar 9 10:01:47 Local time zone must
 # be set--see zic manual page 2004').
-export TZ=UTC
+TZ=UTC
+export TZ
 
 
 # Set the prefix.  This is generally $out, but it can be overriden,
@@ -275,7 +278,8 @@ fi
 
 
 # Make GNU Make produce nested output.
-export NIX_INDENT_MAKE=1
+NIX_INDENT_MAKE=1
+export NIX_INDENT_MAKE
 
 
 # Normalize the NIX_BUILD_CORES variable. The value might be 0, which
