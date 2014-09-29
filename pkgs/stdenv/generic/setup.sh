@@ -57,22 +57,44 @@ trap "exitHandler" EXIT
 ######################################################################
 # Helper functions that might be useful in setup hooks.
 
+shellEscape() {
+    local escaped=""
+    local left="$*"
+
+    while [ "x${left#*\'}" != "x$left" ]; do
+        escaped="$escaped${left%%\'*}'\\''"
+        left="${left#*\'}"
+    done
+
+    echo "$escaped$left"
+}
 
 addToSearchPathWithCustomDelimiter() {
-    local delimiter=$1
-    local varName=$2
-    local dir=$3
+    local delimiter="$1"
+    local varName="$2"
+    local dir="$(shellEscape "$3")"
     if [ -d "$dir" ]; then
-        eval export ${varName}=${!varName}${!varName:+$delimiter}${dir}
+        eval "$varName=\"\$$varName\${$varName:+$delimiter}\"'$dir'"
+        export "$varName"
     fi
 }
 
 PATH_DELIMITER=':'
 
 addToSearchPath() {
-    addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
+    addToSearchPathWithCustomDelimiter "$PATH_DELIMITER" "$@"
 }
 
+envHooks=
+crossEnvHooks=
+
+addEnvHooks() {
+    envHooks="$envHooks $*"
+}
+
+addCrossEnvHooks() {
+    crossEnvHooks="$crossEnvHooks $*"
+}
 
 ######################################################################
 # Initialisation.
@@ -112,8 +134,6 @@ runHook preHook
 if [ -z "$SHELL" ]; then echo "SHELL not set"; exit 1; fi
 
 # Hack: run gcc's setup hook.
-envHooks=()
-crossEnvHooks=()
 if [ -f $NIX_GCC/nix-support/setup-hook ]; then
     source $NIX_GCC/nix-support/setup-hook
 fi
@@ -186,8 +206,8 @@ addToNativeEnv() {
     fi
 
     # Run the package-specific hooks set by the setup-hook scripts.
-    for i in "${envHooks[@]}"; do
-        $i $pkg
+    for i in $envHooks; do
+        "$i" "$pkg"
     done
 }
 
@@ -206,8 +226,8 @@ addToCrossEnv() {
     fi
 
     # Run the package-specific hooks set by the setup-hook scripts.
-    for i in "${crossEnvHooks[@]}"; do
-        $i $pkg
+    for i in $crossEnvHooks; do
+        "$i" "$pkg"
     done
 }
 
