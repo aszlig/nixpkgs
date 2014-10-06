@@ -9071,6 +9071,8 @@ let
 
   qsynth = callPackage ../applications/audio/qsynth { };
 
+  qtox = callPackage ../applications/networking/instant-messengers/qtox { };
+
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
   qtractor = callPackage ../applications/audio/qtractor { };
@@ -9388,6 +9390,8 @@ let
   uzbl = callPackage ../applications/networking/browsers/uzbl {
     webkit = webkitgtk2;
   };
+  
+  utox = callPackage ../applications/networking/instant-messengers/utox { };
 
   vanitygen = callPackage ../applications/misc/vanitygen { };
 
