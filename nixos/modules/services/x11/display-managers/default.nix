@@ -169,7 +169,6 @@ in
 
       xserverBin = mkOption {
         type = types.path;
-        default = "${xorg.xorgserver}/bin/X";
         description = "Path to the X server used by display managers.";
       };
 
@@ -258,7 +257,7 @@ in
         environment = mkOption {
           type = types.attrsOf types.unspecified;
           default = {};
-          example = { SLIM_CFGFILE = /etc/slim.conf; };
+          example = literalExample "{ SLIM_CFGFILE = /etc/slim.conf; }";
           description = "Additional environment variables needed by the display manager.";
         };
 
@@ -275,6 +274,12 @@ in
       };
 
     };
+
+  };
+
+  config = {
+
+    services.xserver.displayManager.xserverBin = "${xorg.xorgserver}/bin/X";
 
   };
 
