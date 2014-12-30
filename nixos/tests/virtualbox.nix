@@ -334,6 +334,15 @@ in {
       $machine->waitForWindow(qr/Oracle VM VirtualBox Manager/);
       $machine->sleep(5);
       $machine->screenshot("gui_manager_started");
+
+      subtest "file-dialog", sub {
+        $machine->sendKeys("ctrl+i");
+        $machine->waitForWindow(qr/Import Virtual Appliance/);
+        $machine->sendKeys("tab");
+        $machine->sendKeys("space");
+        $machine->screenshot("gui_manager_file_dialog");
+      };
+
       $machine->sendKeys("ret");
       $machine->screenshot("gui_manager_sent_startup");
       waitForStartup_simple;
