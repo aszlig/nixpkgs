@@ -337,6 +337,8 @@ in {
 
       subtest "file-dialog", sub {
         $machine->sendKeys("ctrl+i");
+        $machine->sleep(5);
+        $machine->screenshot("gui_manager_appliance_importer");
         $machine->waitForWindow(qr/Import Virtual Appliance/);
         $machine->sendKeys("tab");
         $machine->sendKeys("space");
