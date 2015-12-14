@@ -50,6 +50,7 @@ rec {
           mkdir -p $out/nix-support
 
           # force-retest
+          # force-retest
 
           LOGFILE=$out/log.xml tests='eval $ENV{testScript}; die $@ if $@;' ${driver}/bin/nixos-test-driver
 
