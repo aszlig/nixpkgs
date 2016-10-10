@@ -174,9 +174,14 @@ let
     '';
 
     buildPhase = let
+      # XXX: Setting LD_LIBRARY_PATH here is a very ugly workaround currently
+      # needed because the linker flags for build time generated binaries (like
+      # for example mkpeephole in v8) do not include the right rpath for
+      # libstdc++.
       buildCommand = target: ''
-        "${ninja}/bin/ninja" -C "${buildPath}"  \
-          -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
+        LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib" \
+        "${ninja}/bin/ninja" -C "${buildPath}"    \
+          -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES   \
           "${target}"
       '' + optionalString (target == "mksnapshot" || target == "chrome") ''
         paxmark m "${buildPath}/${target}"
