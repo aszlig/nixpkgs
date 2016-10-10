@@ -139,7 +139,7 @@ let
       use_gnome_keyring = gnomeKeyringSupport;
       use_gconf = gnomeSupport;
       use_gio = gnomeSupport;
-      enable_nacl = !enableNaCl;
+      enable_nacl = enableNaCl;
       enable_hotwording = enableHotwording;
       selinux = enableSELinux;
       use_cups = cupsSupport;
@@ -162,7 +162,7 @@ let
       ffmpeg_branding = "Chrome";
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
-      linux_link_pulseaudio = true;
+      link_pulseaudio = true;
     } // (extraAttrs.gnFlags or {}));
 
     configurePhase = ''
