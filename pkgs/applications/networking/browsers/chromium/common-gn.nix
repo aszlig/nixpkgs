@@ -58,8 +58,8 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libjpeg" "libpng" "libvpx" "libwebp" "libxml" "libxslt" "re2"
-    "snappy" "yasm" "zlib"
+    "flac" /* "libjpeg" "libpng" "libvpx"*/ "libwebp" "libxml" "libxslt" #"re2"
+    "snappy" "yasm" #"zlib"
   ];
 
   opusWithCustomModes = libopus.override {
@@ -124,6 +124,13 @@ let
 
       sed -i -re 's/([^:])\<(isnan *\()/\1std::\2/g' \
         chrome/browser/ui/webui/engagement/site_engagement_ui.cc
+
+      sed -i -e '/#include/ {
+        i #include <algorithm>
+        :l; n; bl
+      }' gpu/config/gpu_control_list.cc
+
+      patchShebangs .
     '' + optionalString (versionAtLeast version "52.0.0.0") ''
       sed -i -re 's/([^:])\<(isnan *\()/\1std::\2/g' \
         third_party/pdfium/xfa/fxbarcode/utils.h
