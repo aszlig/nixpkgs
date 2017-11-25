@@ -700,6 +700,7 @@ in
         Section "InputClass"
           Identifier "Keyboard catchall"
           MatchIsKeyboard "on"
+          Option "XkbRules" "base"
           Option "XkbModel" "${cfg.xkbModel}"
           Option "XkbLayout" "${cfg.layout}"
           Option "XkbOptions" "${cfg.xkbOptions}"
