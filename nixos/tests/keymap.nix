@@ -84,11 +84,17 @@ let
 
     testScript = ''
       sub waitCatAndDelete ($) {
-        return $machine->succeed(
+        my ($status, $stdout) = $machine->execute(
           "for i in \$(seq 600); do if [ -e '$_[0]' ]; then ".
           "cat '$_[0]' && rm -f '$_[0]' && exit 0; ".
           "fi; sleep 0.1; done; echo timed out after 60 seconds >&2; exit 1"
         );
+        if ($status != 0) {
+          $machine->screenshot("failure");
+          open DUMMY, ">>".$ENV{"out"}."/nix-support/failed";
+          close DUMMY;
+        }
+        return $stdout;
       };
 
       sub mkTest ($$) {
@@ -98,13 +104,14 @@ let
         my $shellTestdata = join ' ', map { "'".s/'/'\\'''/gr."'" } @testdata;
 
         subtest $desc, sub {
+          return if -e $ENV{"out"}."/nix-support/failed";
           $machine->succeed("$cmd ${testReader} $shellTestdata &");
           while (my ($testname, $qwerty, $expect) = splice(@testdata, 0, 3)) {
             waitCatAndDelete "/tmp/reader.ready";
             $machine->sendKeys($qwerty);
+            return if -e $ENV{"out"}."/nix-support/failed";
           };
-          my $exitcode = waitCatAndDelete "/tmp/reader.exit";
-          die "tests for $desc failed" if $exitcode ne 0;
+          waitCatAndDelete "/tmp/reader.exit";
         };
       }
 
