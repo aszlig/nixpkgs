@@ -3,9 +3,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pyocr";
+  name = "pyocr-${version}";
   version = "0.4.7";
-  name = pname + "-" + version;
 
   # Don't fetch from PYPI because it doesn't contain tests.
   src = fetchFromGitHub {

@@ -97,8 +97,6 @@ let
   };
 
 in buildPythonPackage (common // {
-  pname = "tensorflow";
-  version = common.version;
   name = "tensorflow-${common.version}";
 
   deps = stdenv.mkDerivation (common // {

@@ -2,14 +2,12 @@
 , boost, freetype, ftgl, mesa }:
 
 buildPythonPackage rec {
-  pname = "pyftgl";
-  version = "0.4b";
-  name = pname + "-" + version;
+  name = "pyftgl-0.4b";
 
   src = fetchFromGitHub {
     owner = "umlaeute";
-    repo = name;
-    rev = version;
+    repo = "pyftgl";
+    rev = "0.4b";
     sha256 = "12zcjv4cwwjihiaf74kslrdmmk4bs47h7006gyqfwdfchfjdgg4r";
   };
 

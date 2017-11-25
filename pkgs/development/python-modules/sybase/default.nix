@@ -6,9 +6,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-sybase";
+  name = "python-sybase-${version}";
   version = "0.40pre2";
-  name = pname + "-" + version;
   disabled = isPy3k;
 
   src = fetchurl {

@@ -1,4 +1,4 @@
-# Generic builder.
+/* Generic builder for Python packages that come without a setup.py. */
 
 { lib
 , python
@@ -6,12 +6,12 @@
 , setuptools
 , unzip
 , ensureNewerSourcesHook
-# Whether the derivation provides a Python module or not.
-, pythonModule
-, namePrefix
 }:
 
 { name ? "${attrs.pname}-${attrs.version}"
+
+# by default prefix `name` e.g. "python3.3-${name}"
+, namePrefix ? python.libPrefix + "-"
 
 # Dependencies for building the package
 , buildInputs ? []
@@ -54,21 +54,18 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
-python.stdenv.mkDerivation (builtins.removeAttrs attrs [
-    "disabled" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts"
-  ] // {
+python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "checkInputs"] // {
 
   name = namePrefix + name;
 
-  buildInputs = ([ wrapPython (ensureNewerSourcesHook { year = "1980"; }) ]
-    ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip)
-    ++ lib.optionals doCheck checkInputs
-    ++ lib.optional catchConflicts setuptools # If we nog longer propagate setuptools
-    ++ buildInputs
-    ++ pythonPath
-  );
+  inherit pythonPath;
 
-  # Propagate python and setuptools. We should stop propagating setuptools.
+  buildInputs = [ wrapPython ] ++ buildInputs ++ pythonPath
+    ++ [ (ensureNewerSourcesHook { year = "1980"; }) ]
+    ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip)
+    ++ lib.optionals doCheck checkInputs;
+
+  # propagate python/setuptools to active setup-hook in nix-shell
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
 
   # Python packages don't have a checkPhase, only an installCheckPhase
@@ -86,12 +83,15 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs [
 
   passthru = {
     inherit python; # The python interpreter
-    inherit pythonModule;
   } // passthru;
 
-  meta = {
+  meta = with lib.maintainers; {
     # default to python's platforms
     platforms = python.meta.platforms;
+  } // meta // {
+    # add extra maintainer(s) to every package
+    maintainers = (meta.maintainers or []) ++ [ chaoflow ];
+    # a marker for release utilities to discover python packages
     isBuildPythonPackage = python.meta.platforms;
-  } // meta;
+  };
 })

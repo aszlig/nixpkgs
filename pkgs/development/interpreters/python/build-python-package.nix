@@ -1,14 +1,11 @@
-# This function provides a generic Python package builder,
-# and can build packages that use distutils, setuptools or flit.
+/* This function provides a generic Python package builder.  It is
+   intended to work with packages that use `distutils/setuptools'
+   (http://pypi.python.org/pypi/setuptools/), which represents a large
+   number of Python packages nowadays.  */
 
 { lib
 , python
-, wrapPython
-, setuptools
-, unzip
-, ensureNewerSourcesHook
-, pythonModule
-, namePrefix
+, mkPythonDerivation
 , bootstrapped-pip
 , flit
 }:
@@ -18,9 +15,6 @@ let
   flit-specific = import ./build-python-package-flit.nix { inherit python flit; };
   wheel-specific = import ./build-python-package-wheel.nix { };
   common = import ./build-python-package-common.nix { inherit python bootstrapped-pip; };
-  mkPythonDerivation = import ./mk-python-derivation.nix {
-    inherit lib python wrapPython setuptools unzip ensureNewerSourcesHook pythonModule namePrefix;
-  };
 in
 
 {

@@ -1,9 +1,8 @@
 { lib, fetchurl, buildPythonPackage, requests, six, zeroconf, protobuf }:
 
 buildPythonPackage rec {
-  pname = "PyChromecast";
+  name    = "PyChromecast-${version}";
   version = "0.8.1";
-  name = pname + "-" + version;
 
   src = fetchurl {
     url    = "mirror://pypi/p/pychromecast/${name}.tar.gz";

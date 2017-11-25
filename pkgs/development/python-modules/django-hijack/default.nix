@@ -2,9 +2,8 @@
   django, django_compat, django_nose
 }:
 buildPythonPackage rec {
-  pname = "django-hijack";
+  name = "django-hijack-${version}";
   version = "2.1.4";
-  name = pname + "-" + version;
 
   # the pypi packages don't include everything required for the tests
   src = fetchFromGitHub {

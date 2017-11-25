@@ -5,9 +5,8 @@
 , python
 }:
 buildPythonPackage rec {
-  pname = "cymem";
+  name = "cymem-${version}";
   version = "1.31.2";
-  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "explosion";
@@ -17,14 +16,14 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-   cython
+   cython   
   ];
-
+    
   checkPhase = ''
     cd cymem/tests
     ${python.interpreter} -m unittest discover -p "*test*"
   '';
-
+  
   meta = with stdenv.lib; {
     description = "Cython memory pool for RAII-style memory management";
     homepage = https://github.com/explosion/cymem;

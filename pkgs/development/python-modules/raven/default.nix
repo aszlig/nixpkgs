@@ -1,9 +1,7 @@
 { lib, buildPythonPackage, fetchurl, isPy3k, contextlib2 }:
 
 buildPythonPackage rec {
-  pname = "raven";
-  version = "6.3.0";
-  name = pname + "-" + version;
+  name = "raven-6.3.0";
 
   src = fetchurl {
     url = "mirror://pypi/r/raven/${name}.tar.gz";

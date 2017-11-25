@@ -1,10 +1,6 @@
 { buildPythonPackage, django_1_8, waitress }:
-
-buildPythonPackage rec {
-  pname = "waitress-django";
-  version = "0.0.0";
-  name = pname;
-
+buildPythonPackage {
+  name = "waitress-django";
   src = ./.;
   pythonPath = [ django_1_8 waitress ];
   doCheck = false;

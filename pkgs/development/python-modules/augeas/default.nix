@@ -1,8 +1,7 @@
 { stdenv, lib, buildPythonPackage, fetchFromGitHub, augeas, cffi }:
 buildPythonPackage rec {
-    pname = "augeas";
+    name = "augeas-${version}";
     version = "1.0.2";
-    name = pname + "-" + version;
 
     src = fetchFromGitHub {
       owner = "hercules-team";

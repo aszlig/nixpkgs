@@ -4,9 +4,10 @@
 , pytest
 }:
 
-buildPythonPackage rec {
+let
   pname = "webencodings";
   version = "0.5.1";
+in buildPythonPackage rec {
   name = "${pname}-${version}";
 
   src = fetchurl {

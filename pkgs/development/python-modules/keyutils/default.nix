@@ -1,8 +1,9 @@
 { lib, buildPythonPackage, fetchurl, pkgs, pytestrunner }:
 
-buildPythonPackage rec {
+let
   pname = "keyutils";
   version = "0.5";
+in buildPythonPackage rec {
   name = "${pname}-${version}";
 
   src = fetchurl {

@@ -6,9 +6,10 @@
 , six
 }:
 
-buildPythonPackage rec {
+let
   pname = "pytest-expect";
   version = "1.1.0";
+in buildPythonPackage rec {
   name = "${pname}-${version}";
 
   src = fetchurl {

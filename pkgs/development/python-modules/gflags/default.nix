@@ -2,8 +2,7 @@
 
 buildPythonPackage rec {
   version = "3.1.2";
-  pname = "gflags";
-  name = pname + "-" + version;
+  name = "gflags-${version}";
 
   src = fetchPypi {
     inherit version;

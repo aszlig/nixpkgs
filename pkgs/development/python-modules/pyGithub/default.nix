@@ -3,9 +3,8 @@
 , buildPythonPackage, python-jose }:
 
 buildPythonPackage rec {
-  pname = "PyGithub";
+  name = "PyGithub-${version}";
   version = "1.32";
-  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "PyGithub";

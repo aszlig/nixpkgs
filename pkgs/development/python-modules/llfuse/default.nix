@@ -3,9 +3,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "llfuse";
-  version = "1.0";
-  name = pname + "-" + version;
+  name = "llfuse-1.0";
 
   src = fetchurl {
     url = "mirror://pypi/l/llfuse/${name}.tar.bz2";

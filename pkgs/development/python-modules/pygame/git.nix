@@ -3,9 +3,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pygame";
+  name = "pygame-${version}";
   version = "2016-05-17";
-  name = pname + "-" + version;
 
   src = fetchFromBitbucket {
     owner = "pygame";

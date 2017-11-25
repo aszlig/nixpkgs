@@ -4,8 +4,7 @@
 buildPythonPackage rec {
   pname = "asn1ate";
   date = "20160810";
-  version = "unstable-${date}";
-  name = "${pname}-${version}";
+  name = "${pname}-unstable-${date}";
 
   src = fetchFromGitHub {
     sha256 = "04pddr1mh2v9qq8fg60czwvjny5qwh4nyxszr3qc4bipiiv2xk9w";

@@ -2,9 +2,8 @@
 
 buildPythonPackage rec {
   version = "3.0.2";
-  pname = "robotframework";
+  name = "robotframework-${version}";
   disabled = isPy3k;
-  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/r/robotframework/${name}.tar.gz";

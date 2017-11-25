@@ -1,9 +1,8 @@
 { stdenv, fetchurl, buildPythonPackage, pyusb }:
 
 buildPythonPackage rec {
-  pname = "usbtmc";
+  name = "usbtmc-${version}";
   version = "0.8";
-  name = pname + "-" + version;
 
   src = fetchurl {
     url = "https://github.com/python-ivi/python-usbtmc/archive/v${version}.tar.gz";

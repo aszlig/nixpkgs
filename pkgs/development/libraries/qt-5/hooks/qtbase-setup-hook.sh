@@ -33,7 +33,7 @@ addToQMAKEPATH() {
 # package depending on the building package. (This is necessary in case
 # the building package does not provide runtime dependencies itself and so
 # would not be propagated to the user environment.)
-qtEnvHook() {
+qtCrossEnvHook() {
     addToQMAKEPATH "$1"
     if providesQtRuntime "$1"; then
         if [ "z${!outputBin}" != "z${!outputDev}" ]; then
@@ -42,11 +42,20 @@ qtEnvHook() {
         propagatedUserEnvPkgs+=" $1"
     fi
 }
-if [ "$crossConfig" ]; then
-   crossEnvHooks+=(qtEnvHook)
-else
-   envHooks+=(qtEnvHook)
-fi
+crossEnvHooks+=(qtCrossEnvHook)
+
+qtEnvHook() {
+    addToQMAKEPATH "$1"
+    if providesQtRuntime "$1"; then
+        if [ "z${!outputBin}" != "z${!outputDev}" ]; then
+            propagatedNativeBuildInputs+=" $1"
+        fi
+        if [ -z "$crossConfig" ]; then
+        propagatedUserEnvPkgs+=" $1"
+        fi
+    fi
+}
+envHooks+=(qtEnvHook)
 
 postPatchMkspecs() {
     local bin="${!outputBin}"

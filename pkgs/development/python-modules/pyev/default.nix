@@ -1,9 +1,7 @@
 { stdenv, fetchurl, buildPythonPackage, libev }:
 
 buildPythonPackage rec {
-  pname = "pyev";
-  version = "0.9.0";
-  name = pname + "-" + version;
+  name = "pyev-0.9.0";
 
   src = fetchurl {
     url = "mirror://pypi/p/pyev/${name}.tar.gz";

@@ -2,9 +2,7 @@
 , buildPythonPackage, libglade ? null, isPy3k }:
 
 buildPythonPackage rec {
-  pname = "pygtk";
-  version = "2.24.0";
-  name = pname + "-" + version;
+  name = "pygtk-2.24.0";
 
   disabled = isPy3k;
 

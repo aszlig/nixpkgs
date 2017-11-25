@@ -2,11 +2,10 @@
 , pytest, dns }:
 
 buildPythonApplication rec {
-  name = "${pname}-${version}";
+  name = "${pname}-${majorversion}.${minorversion}";
   pname = "dkimpy";
   majorversion = "0.6";
   minorversion = "2";
-  version = "${majorversion}.${minorversion}";
 
   src = fetchurl {
     url = "https://launchpad.net/${pname}/${majorversion}/${majorversion}.${minorversion}/+download/${name}.tar.gz";

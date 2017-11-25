@@ -3,9 +3,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "blockdiag";
+  name = "blockdiag-${version}";
   version = "1.5.3";
-  name = pname + "-" + version;
 
   src = fetchurl {
     url = "https://bitbucket.org/blockdiag/blockdiag/get/${version}.tar.bz2";

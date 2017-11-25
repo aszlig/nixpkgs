@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "path.py";
   version = "10.4";
-  name = pname + "-" + version;
+  name = "path.py-${version}";
 
   src = fetchPypi {
     inherit pname version;

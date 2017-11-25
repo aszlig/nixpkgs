@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs ./src/Analyses/cat_with_lines";
 
+  pythonPath = []; # python wrapper support
+
   patches = [
     ./darwin.patch # configure relies on impure sw_vers to -Dunix
   ];

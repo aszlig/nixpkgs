@@ -5,9 +5,8 @@
   ... }:
 
 buildPythonPackage rec {
-  pname = "arelle-${version}${lib.optionalString (!gui) "-headless"}";
+  name = "arelle-${version}${lib.optionalString (!gui) "-headless"}";
   version = "2017-08-24";
-  name = pname + "-" + version;
 
   disabled = !isPy3k;
 

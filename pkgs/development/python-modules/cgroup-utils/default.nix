@@ -2,8 +2,7 @@
 
 buildPythonPackage rec {
   version = "0.6";
-  pname = "cgroup-utils";
-  name = pname + "-" + version;
+  name = "cgroup-utils-${version}";
 
   buildInputs = [ pep8 nose ];
   # Pep8 tests fail...

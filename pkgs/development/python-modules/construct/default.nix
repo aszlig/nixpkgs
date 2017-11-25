@@ -1,9 +1,8 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, six, pythonOlder }:
 
 buildPythonPackage rec {
-  pname = "construct";
+  name = "construct-${version}";
   version = "2.8.16";
-  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "construct";

@@ -1,9 +1,7 @@
 { stdenv, fetchurl, buildPythonPackage, isPy3k, isPyPy }:
 
 buildPythonPackage rec {
-  pname = "scapy";
-  version = "2.2.0";
-  name = pname + "-" + version;
+  name = "scapy-2.2.0";
 
   disabled = isPy3k || isPyPy;
 

@@ -1,9 +1,7 @@
 { stdenv, python }:
 
 stdenv.mkDerivation rec {
-  pname = "python-recursive-pth-loader";
-  version = "1.0";
-  name = pname + "-" + version;
+  name = "python-recursive-pth-loader-1.0";
 
   unpackPhase = "true";
 

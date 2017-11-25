@@ -1,9 +1,10 @@
 { stdenv, buildPythonPackage, fetchPypi }:
-
-buildPythonPackage rec {
+let
   pname = "first";
   version = "2.0.1";
-  name = pname + "-" + version;
+in
+buildPythonPackage {
+  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

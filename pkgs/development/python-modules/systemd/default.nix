@@ -1,9 +1,8 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, systemd, pkgconfig }:
 
 buildPythonPackage rec {
-  pname = "systemd";
+  name = "python-systemd-${version}";
   version = "234";
-  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "systemd";

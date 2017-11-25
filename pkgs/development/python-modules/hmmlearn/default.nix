@@ -1,9 +1,8 @@
 { lib, fetchurl, buildPythonPackage, numpy }:
 
 buildPythonPackage rec {
-  pname = "hmmlearn";
+  name = "hmmlearn-${version}";
   version = "0.2.0";
-  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/h/hmmlearn/${name}.tar.gz";
