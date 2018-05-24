@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, python, zlib, pkgconfig, glib
+{ stdenv, fetchurl, fetchpatch, python, zlib, ffmpeg_3, pkgconfig, glib
 , ncurses, perl, pixman, vde2, alsaLib, texinfo, flex
 , bison, lzo, snappy, libaio, gnutls, nettle, curl
-, makeWrapper
+, makeWrapper, runCommandCC
 , attr, libcap, libcap_ng
 , CoreServices, Cocoa, Hypervisor, rez, setfile
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
@@ -33,6 +33,16 @@ let
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
 
+  videoEncoder = runCommandCC "nixos-test-encode-video" {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ ffmpeg_3 zlib ];
+    pkgconfigLibs = [
+      "libavformat" "libavcodec" "libavutil" "libswscale" "zlib"
+    ];
+  } ''
+    $CC -Wall $(pkg-config $pkgconfigLibs --libs --cflags) \
+      ${./encode-video.c} -o "$out"
+  '';
 in
 
 stdenv.mkDerivation rec {
@@ -161,6 +171,9 @@ stdenv.mkDerivation rec {
                   $out/bin/qemu-kvm \
                   --add-flags "\$([ -e /dev/kvm ] && echo -enable-kvm)"
     fi
+  '' + optionalString nixosTestRunner ''
+    install -vD ${escapeShellArg videoEncoder} \
+      "$out/bin/nixos-test-encode-video"
   '';
 
   passthru = {
