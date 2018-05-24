@@ -79,8 +79,10 @@ stdenv.mkDerivation rec {
     ./no-etc-install.patch
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
-  ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
-    ++ optionals stdenv.hostPlatform.isMusl [
+  ] ++ optionals nixosTestRunner [
+    ./force-uid0-on-9p.patch
+    ./nixos-test-ui.patch
+  ] ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/alpinelinux/aports/2bb133986e8fa90e2e76d53369f03861a87a74ef/main/qemu/xattr_size_max.patch";
       sha256 = "1xfdjs1jlvs99hpf670yianb8c3qz2ars8syzyz8f2c2cp5y4bxb";
@@ -95,6 +97,10 @@ stdenv.mkDerivation rec {
       sha256 = "0wk0rrcqywhrw9hygy6ap0lfg314m9z1wr2hn8338r5gfcw75mav";
     })
   ];
+
+  postPatch = optionalString nixosTestRunner ''
+    cat ${./nixos-test-ui.c} > ui/nixos-test.c
+  '';
 
   hardeningDisable = [ "stackprotector" ];
 
