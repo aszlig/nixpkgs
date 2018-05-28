@@ -150,7 +150,9 @@ class StartCommand:
         display_opts = ""
         display_available = any(x in os.environ for x in ["DISPLAY", "WAYLAND_DISPLAY"])
         if not display_available:
-            display_opts += " -nographic"
+            capture_file = Path(os.environ.get("out", Path.cwd()))
+            capture_file /= f"{self.machine_name}.video"
+            display_opts += f" -nixos-test {shlex.quote(str(capture_file))}"
 
         # qemu options
         qemu_opts = (
