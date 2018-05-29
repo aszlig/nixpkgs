@@ -659,7 +659,10 @@ class Machine:
 
         capture_options = []
         if "DISPLAY" not in os.environ:
-            capture_options.append(f"-nixos-test {shlex.quote(capture_file)}")
+            if "DISABLE_VIDCAPTURE" in os.environ:
+                capture_options.append("-nographic")
+            else:
+                capture_options.append(f"-nixos-test {shlex.quote(capture_file)}")
 
         qemu_options = (
             " ".join(

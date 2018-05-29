@@ -244,6 +244,7 @@ rec {
         export | ${gnugrep}/bin/grep -v '^xchg=' > $xchg/saved-env
         unset xchg
 
+        export DISABLE_VIDCAPTURE=1
         export tests='${testScript}'
         ${testDriver}/bin/nixos-test-driver ${vm.config.system.build.vm}/bin/run-*-vm
       ''; # */
