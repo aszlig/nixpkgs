@@ -72,7 +72,7 @@ rec {
 
       passthru.videos = runCommand "vm-test-run-${driver.testName}-videos" {
         src = runTests driver;
-        nativeBuildInputs = [ qemu_test ];
+        nativeBuildInputs = [ qemu_test.tools ];
       } ''
         mkdir -p "$out/nix-support"
         if [ -e "$src/nix-support/hydra-build-products" ]; then
