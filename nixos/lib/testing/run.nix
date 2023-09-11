@@ -41,7 +41,6 @@ in
           # effectively mute the XMLLogger
           export LOGFILE=/dev/null
 
-          export DISABLE_VIDCAPTURE=1
           ${config.driver}/bin/nixos-test-driver -o $out
         '';
 

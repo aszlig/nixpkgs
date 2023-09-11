@@ -141,6 +141,10 @@ class StartCommand:
 
     _cmd: str
 
+    @property
+    def machine_name(self) -> str:
+        raise NotImplementedError("No machine_name property defined")
+
     def cmd(
         self,
         monitor_socket_path: Path,
